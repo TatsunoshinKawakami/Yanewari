@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Yanewari.Views"
+        xmlns:vm="clr-namespace:Yanewari.ViewModels"
         mc:Ignorable="d"
         Title="MainView" Height="800" Width="900">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.Resources>
             <Style x:Key="Parameter" TargetType="StackPanel">
@@ -18,16 +22,24 @@
             </Style>
         </Grid.Resources>
         <DockPanel VerticalAlignment="Top">
-        <StackPanel DockPanel.Dock="Top" Height="350">
-            <StackPanel Style="{StaticResource Parameter}">
-                <Label Content="瓦の種類" Width="75"/>
-                <TextBox TextWrapping="Wrap" Width="120" FontSize="20"/>
-            </StackPanel>
+            <StackPanel DockPanel.Dock="Top" Height="350">
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Label Content="瓦の種類" Width="75"/>
+                    <TextBox Text="{Binding Path=Tile, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
+                </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
                     <Label Content="屋根幅" Width="75"/>
-                    <TextBox TextWrapping="Wrap" Width="120" FontSize="20"/>
+                    <TextBox Text="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
                 </StackPanel>
-        </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Label Content="左の高さ" Width="75"/>
+                    <TextBox Text="{Binding Path=Left, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Label Content="右の高さ" Width="75"/>
+                    <TextBox Text="{Binding Path=Right, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
+                </StackPanel>
+            </StackPanel>
         </DockPanel>
     </Grid>
 </Window>
