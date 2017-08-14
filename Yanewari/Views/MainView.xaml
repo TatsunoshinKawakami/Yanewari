@@ -1,0 +1,33 @@
+﻿<Window x:Class="Yanewari.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Yanewari.Views"
+        mc:Ignorable="d"
+        Title="MainView" Height="800" Width="900">
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="Parameter" TargetType="StackPanel">
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="Orientation" Value="Horizontal"/>
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+        </Grid.Resources>
+        <DockPanel VerticalAlignment="Top">
+        <StackPanel DockPanel.Dock="Top" Height="350">
+            <StackPanel Style="{StaticResource Parameter}">
+                <Label Content="瓦の種類" Width="75"/>
+                <TextBox TextWrapping="Wrap" Width="120" FontSize="20"/>
+            </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Label Content="屋根幅" Width="75"/>
+                    <TextBox TextWrapping="Wrap" Width="120" FontSize="20"/>
+                </StackPanel>
+        </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

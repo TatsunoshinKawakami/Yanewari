@@ -13,5 +13,10 @@ namespace Yanewari
     /// </summary>
     public partial class App : Application
     {
+        private void AppStart(object sender, StartupEventArgs e)
+        {
+            var win = new Views.MainView();
+            win.Show();
+        }
     }
 }
