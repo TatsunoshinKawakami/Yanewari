@@ -24,8 +24,8 @@
         <DockPanel VerticalAlignment="Top">
             <StackPanel DockPanel.Dock="Top" Height="350">
                 <StackPanel Style="{StaticResource Parameter}">
-                    <Label Content="瓦の種類" Width="75"/>
-                    <TextBox Text="{Binding Path=Tile, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
+                    <Label Content="種類" Width="75"/>
+                    <ComboBox ItemsSource="{Binding Path=Tile}" SelectedIndex="{Binding Path=SelectedTile, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
                     <Label Content="屋根幅" Width="75"/>
@@ -39,7 +39,32 @@
                     <Label Content="右の高さ" Width="75"/>
                     <TextBox Text="{Binding Path=Right, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
                 </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Button Content="計算実行" Command="{Binding Path=CalculateCommand}" Width="90"/>
+                </StackPanel>
             </StackPanel>
+            <Canvas DockPanel.Dock="Top">
+                <ItemsControl ItemsSource="{Binding Path=Lines}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Canvas>
+                                <Line X1="{Binding Path=X1}" X2="{Binding Path=X2}" Y1="{Binding Path=Y1}" Y2="{Binding Path=Y2}" Stroke="Black" Canvas.Top="0" Canvas.Left="0"/>
+                            </Canvas>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Canvas.Top" Value="50"/>
+                            <Setter Property="Canvas.Left" Value="50"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+            </Canvas>
         </DockPanel>
     </Grid>
 </Window>

@@ -12,21 +12,22 @@ namespace Yanewari.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
+        private double[] table = { 500, 333, 600, 370 };
         private double tile;
         private double width;
         private double left;
         private double right;
-        private int number;
+        private List<Line> lines;
         private double extra;
-        private List<Line> lines = new List<Line>();
 
         private DelegateCommand calculateCommand;
 
-        public double Tile
+        public List<string> Tile
         {
-            get { return tile; }
-            set { tile = value; }
+            get { return new List<string> { "166ハゼ", "Tかん金", "90ハゼ", "立？？" }; }
+            set { }
         }
+        public int SelectedTile { get; set; }
         public double Width
         {
             get { return width; }
@@ -45,17 +46,33 @@ namespace Yanewari.ViewModels
         public List<Line> Lines
         {
             get { return lines; }
-            set { lines = value; }
+            set { lines = value; RaisePropertyChanged("Lines"); }
+        }
+        public double Extra
+        {
+            get { return extra; }
+            set { extra = value; RaisePropertyChanged("Extra"); }
         }
 
 
         public DelegateCommand CalculateCommand { get { return calculateCommand ?? (calculateCommand=new DelegateCommand(calculate)); } }
         private void calculate()
         {
-            CalculateXaxis calculaterXaxis = new CalculateXaxis(tile, width);
-            number = calculaterXaxis.Number;
+            tile = table[SelectedTile];
+            lines = new List<Line>();
+            CalculateXaxis calculaterXaxis = new CalculateXaxis((double)tile, width);
+            int number = calculaterXaxis.Number;
             extra = calculaterXaxis.Extra;
-            RaisePropertyChanged("Number");
+            CalculateYaxis calculaterYaxis = new CalculateYaxis(number, left, right);
+            double max = Math.Max(calculaterYaxis.Answers.Max(), width);
+            foreach (var item in calculaterYaxis.Answers.Select((x, index) => new Tuple<int, double>(index, x)))
+            {
+                lines.Add(new Line(max, 500, item.Item2, item.Item1 * (double)tile));
+                lines.Add(new Line(item.Item1 * (double)tile, item.Item1 * (double)tile + (double)tile, 0, 0, max, 500));
+                lines.Add(new Line(item.Item1 * (double)tile, item.Item1 * (double)tile + (double)tile, item.Item2, item.Item2, max, 500));
+                lines.Add(new Line(max, 500, item.Item2, (item.Item1 + 1) * (double)tile));
+            }
+            RaisePropertyChanged("Lines");
             RaisePropertyChanged("Extra");
         }
     }

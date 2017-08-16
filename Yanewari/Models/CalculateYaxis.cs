@@ -19,6 +19,15 @@ namespace Yanewari.Models
         /// </summary>
         public List<double> Answers { get { return answers; } }
 
+        private void calculate()
+        {
+            double diff = (max_height - min_height) / (width_number - 1);
+            foreach (int coeff in Enumerable.Range(0, width_number))
+                answers.Add(min_height + diff * coeff);
+            if (isReverse)
+                answers.Reverse();
+        }
+
         /// <summary>
         /// 初期化コンストラクタ
         /// </summary>
@@ -30,7 +39,8 @@ namespace Yanewari.Models
             this.width_number = width;
             this.min_height = Math.Min(left, right);
             this.max_height = Math.Max(left, right);
-            this.isReverse = left == this.min_height;
+            this.isReverse = left == this.max_height;
+            calculate();
         }
     }
 }
