@@ -22,10 +22,10 @@
             </Style>
         </Grid.Resources>
         <DockPanel VerticalAlignment="Top">
-            <StackPanel DockPanel.Dock="Top" Height="350">
+            <StackPanel DockPanel.Dock="Left">
                 <StackPanel Style="{StaticResource Parameter}">
                     <Label Content="種類" Width="75"/>
-                    <ComboBox ItemsSource="{Binding Path=Tile}" SelectedIndex="{Binding Path=SelectedTile, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ComboBox ItemsSource="{Binding Path=Tile}" VerticalContentAlignment="Center" SelectedIndex="{Binding Path=SelectedTile, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
                     <Label Content="屋根幅" Width="75"/>
@@ -43,28 +43,51 @@
                     <Button Content="計算実行" Command="{Binding Path=CalculateCommand}" Width="90"/>
                 </StackPanel>
             </StackPanel>
-            <Canvas DockPanel.Dock="Top">
-                <ItemsControl ItemsSource="{Binding Path=Lines}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Canvas>
-                                <Line X1="{Binding Path=X1}" X2="{Binding Path=X2}" Y1="{Binding Path=Y1}" Y2="{Binding Path=Y2}" Stroke="Black" Canvas.Top="0" Canvas.Left="0"/>
-                            </Canvas>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style>
-                            <Setter Property="Canvas.Top" Value="50"/>
-                            <Setter Property="Canvas.Left" Value="50"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                </ItemsControl>
-            </Canvas>
+            <Label DockPanel.Dock="Top" Content="拡大率"/>
+            <Slider DockPanel.Dock="Top"  Orientation="Horizontal" Minimum="100" Maximum="1000" Value="{Binding Path=Scale, UpdateSourceTrigger=Default}"/>
+            <StackPanel DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Label Content="枚数" FontSize="15"/>
+                        <Label Content="{Binding Path=Number}" FontSize="15"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Label Content="両端のあまり" FontSize="15"/>
+                        <Label Content="{Binding Path=Extra}" FontSize="15"/>
+                    </StackPanel>
+                </StackPanel>
+                <Canvas>
+                    <ItemsControl ItemsSource="{Binding Path=Lines}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Canvas Height="{Binding Path=Scaled.Y2}">
+                                    <Line X1="{Binding Path=X1D}" X2="{Binding Path=X2D}" Y1="{Binding Path=Y1D}" Y2="{Binding Path=Y2D}" Stroke="Black" Canvas.Top="0" Canvas.Left="0"/>
+                                    <TextBlock Text="{Binding Path=RealValue}" Canvas.Top="{Binding Path=PostionY}" Canvas.Left="{Binding Path=X1D}" FontSize="17">
+                                        <TextBlock.LayoutTransform>
+                                            <TransformGroup>
+                                                <RotateTransform Angle="90"/>
+                                            </TransformGroup>
+                                        </TextBlock.LayoutTransform>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Extra}" Canvas.Top="-15" Canvas.Left="0" FontSize="15" FontFamily="Mariyo"/>
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Extra}" Canvas.Top="-15" Canvas.Left="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.LastX}" FontSize="15" FontFamily="Mariyo"/>
+                                </Canvas>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Canvas.Top" Value="50"/>
+                                <Setter Property="Canvas.Left" Value="50"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </Canvas>
+            </StackPanel>
         </DockPanel>
     </Grid>
 </Window>
