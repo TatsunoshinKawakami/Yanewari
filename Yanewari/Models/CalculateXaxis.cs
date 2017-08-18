@@ -11,26 +11,39 @@ namespace Yanewari.Models
         private double tile;
         private double width;
 
+        private int number;
+        private double extra;
+
         /// <summary>
         /// 幅に用いる瓦の枚数
         /// </summary>
-        public int Number { get; set; }
+        public int Number { get { return number; } set { number = value; } }
         /// <summary>
         /// 指定幅との差
         /// </summary>
-        public double Extra { get; set; }
+        public double Extra { get { return extra; } set { extra = value; } }
 
         private void calculate()
         {
-            int number = (int)(width / tile);
-            double extra = width - number * tile;
-            if(extra < tile)
+            number = (int)(width / tile);
+            extra = width - number * tile;
+            if (tile == 600 || tile == 500)
             {
-                number--;
-                extra += tile;
+                if (extra > tile)
+                {
+                    number++;
+                    extra -= tile;
+                }
             }
-            Number = number;
-            Extra = extra/2;
+            else
+            {
+                if(extra < tile)
+                {
+                    number--;
+                    extra += tile;
+                }
+            }
+            extra /= 2;
         }
 
         /// <summary>

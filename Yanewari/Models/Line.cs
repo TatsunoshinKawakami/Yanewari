@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Yanewari.Models
 {
-    class Line
+    public class Line
     {
         public double X1 { get { return x1; } set { x1 = value; } }
         public double X2 { get { return x2; } set { x2 = value; } }

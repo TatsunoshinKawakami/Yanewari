@@ -8,17 +8,19 @@ using Yanewari.Common;
 using Yanewari.Models;
 using Yanewari.Views;
 
+using Microsoft.Win32;
+
 namespace Yanewari.ViewModels
 {
-    class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         private double[] table = { 500, 333, 600, 370 };
         private double tile;
-        private double width;
-        private double left;
-        private double right;
+        private double? width;
+        private double? left;
+        private double? right;
         private double scale = 500;
-        private List<Line> lines;
+        private List<Line> lines = new List<Line>();
         private int number;
         private double extra;
         private double lastX;
@@ -26,27 +28,29 @@ namespace Yanewari.ViewModels
         private double max;
 
         private DelegateCommand calculateCommand;
+        private DelegateCommand printCommand;
+        private DelegateCommand saveCommnad;
 
         public List<string> Tile
         {
-            get { return new List<string> { "166ハゼ", "Tかん金", "90ハゼ", "立？？" }; }
+            get { return new List<string> { "166ハゼ", "Tかん金", "90ハゼ", "立馳" }; }
             set { }
         }
         public int SelectedTile { get; set; }
-        public double Width
+        public double? Width
         {
             get { return width; }
-            set { width = value; }
+            set { width = value??-1; RaisePropertyChanged("CalculateCommand"); }
         }
-        public double Left
+        public double? Left
         {
             get { return left; }
-            set { left = value; }
+            set { left = value??-1; RaisePropertyChanged("CalculateCommand"); }
         }
-        public double Right
+        public double? Right
         {
             get { return right; }
-            set { right = value; }
+            set { right = value??-1; RaisePropertyChanged("CalculateCommand"); }
         }
         public double Scale
         {
@@ -66,17 +70,17 @@ namespace Yanewari.ViewModels
         public List<Line> Lines
         {
             get { return lines; }
-            set { lines = value; RaisePropertyChanged("Lines"); }
+            set { lines = value; }
         }
         public int Number
         {
             get { return number; }
-            set { number = value; RaisePropertyChanged("Number"); }
+            set { number = value; }
         }
         public double Extra
         {
             get { return extra; }
-            set { extra = value; RaisePropertyChanged("Extra"); }
+            set { extra = value; }
         }
         public double LastX
         {
@@ -85,9 +89,13 @@ namespace Yanewari.ViewModels
         }
 
 
-        public DelegateCommand CalculateCommand { get { return calculateCommand ?? (calculateCommand=new DelegateCommand(calculate)); } }
+        public DelegateCommand CalculateCommand { get { return calculateCommand ?? (calculateCommand = new DelegateCommand(calculate, canCalculate)); } }
         private void calculate()
         {
+            double width = this.width??-1;
+            double left = this.left??-1;
+            double right = this.right??-1;
+
             tile = table[SelectedTile];
             lines = new List<Line>();
             CalculateXaxis calculaterXaxis = new CalculateXaxis(tile, width);
@@ -109,5 +117,21 @@ namespace Yanewari.ViewModels
             RaisePropertyChanged("Number");
             RaisePropertyChanged("Extra");
         }
+        private bool canCalculate() { return width != null && left != null && right != null; }
+
+        public DelegateCommand PrintCommand { get { return printCommand ?? (printCommand = new DelegateCommand(print, canPrint)); } }
+        private void print() { Printer.Print(this); }
+        private bool canPrint() { return lines.Count > 0; }
+
+        public DelegateCommand SaveCommand { get { return saveCommnad ?? (saveCommnad = new DelegateCommand(save, canSave)); } }
+        private void save()
+        {
+            var dialog = new SaveFileDialog();
+            dialog.Title = "図形を保存";
+            dialog.Filter = "XPSファイル|*.xps";
+            if (dialog.ShowDialog() == true)
+                SaveGraph.Save(this, dialog.FileName);
+        }
+        private bool canSave() { return lines.Count > 0; }
     }
 }

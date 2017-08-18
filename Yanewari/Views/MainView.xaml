@@ -32,15 +32,21 @@
                     <TextBox Text="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
-                    <Label Content="左の高さ" Width="75"/>
+                    <Label Content="左の長さ" Width="75"/>
                     <TextBox Text="{Binding Path=Left, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
-                    <Label Content="右の高さ" Width="75"/>
+                    <Label Content="右の長さ" Width="75"/>
                     <TextBox Text="{Binding Path=Right, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
                     <Button Content="計算実行" Command="{Binding Path=CalculateCommand}" Width="90"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Button Content="印刷" Command="{Binding Path=PrintCommand}" Width="90"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
+                    <Button Content="保存" Command="{Binding Path=SaveCommand}" Width="90"/>
                 </StackPanel>
             </StackPanel>
             <Label DockPanel.Dock="Top" Content="拡大率"/>
