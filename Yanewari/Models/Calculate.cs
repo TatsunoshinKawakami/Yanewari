@@ -1,46 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ForMyFather.Model
+namespace Yanewari.Models
 {
-	class Calculate
-	{
-		private List<Trapezoid> _ans = new List<Trapezoid>();
-		private double _upper;
-		private double _lower;
-		private double _height;
-		private double _lap;
-		private int _divNum;
+    class Calculate
+    {
+        private double tile;
+        private double width;
+        private double left;
+        private double right;
 
-		public List<Trapezoid> Ans
-		{
-			get
-			{
-				return new List<Trapezoid>(_ans);
-			}
-			set { _ans = value; }
-		}     //答えのプロパティ
+        private int number;
+        private double extra;
+        private List<double> answers = new List<double>();
 
-		private void calculate()
-		{
-			double lo, up;
-			for (int i = 1; i <= _divNum; i++)
-			{
-				lo = ((i / (double)_divNum) * _height + _lap) / _height * (_lower - _upper) + _upper;
-				up = (i - 1) / (double)_divNum * (_lower - _upper) + _upper;
-				_ans.Add(new Trapezoid(up, lo, _height / _divNum + _lap));
-			}
-		}		 //それぞれの台形の上底、下底、高さを計算する関数
+        /// <summary>
+        /// 幅に用いる瓦の枚数
+        /// </summary>
+        public int Number { get { return number; } set { number = value; } }
+        /// <summary>
+        /// 指定幅との差
+        /// </summary>
+        public double Extra { get { return extra; } set { extra = value; } }
+        public List<double> Answers { get { return answers; } }
 
-		public Calculate(double u, double l, double h, double lap, int d)
-		{
-			_upper = u;
-			_lower = l;
-			_height = h;
-			_lap = lap;
-			_divNum = d;
-			calculate();
-		}	 //コンストラクタ
-	}   //台形を分けるようの計算クラス
+        private void calculate()
+        {
+            number = (int)(width / tile);
+            extra = width - number * tile;
+            if (tile == 600 || tile == 500)
+            {
+                if (extra > tile)
+                {
+                    number++;
+                    extra -= tile;
+                }
+            }
+            else
+            {
+                if(extra < tile)
+                {
+                    number--;
+                    extra += tile;
+                }
+            }
+            extra /= 2;
+
+            double diff = Math.Abs(left - right);
+            double scale = width / diff;
+            double width_triangle = Math.Max(left, right) * scale;
+            foreach (int coeff in Enumerable.Range(0, number))
+                answers.Add((width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle);
+        }
+
+        /// <summary>
+        /// 初期化コンストラクタ
+        /// </summary>
+        /// <param name="tile">瓦の種類</param>
+        /// <param name="width">指定される幅</param>
+        public Calculate(double tile, double width, double left, double right)
+        {
+            this.tile = tile;
+            this.width = width;
+            this.right = right;
+            this.left = left;
+            calculate();
+        }
+    }
 }

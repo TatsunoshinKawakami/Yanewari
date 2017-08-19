@@ -98,12 +98,11 @@ namespace Yanewari.ViewModels
 
             tile = table[SelectedTile];
             lines = new List<Line>();
-            CalculateXaxis calculaterXaxis = new CalculateXaxis(tile, width);
-            number = calculaterXaxis.Number;
-            extra = calculaterXaxis.Extra;
-            CalculateYaxis calculaterYaxis = new CalculateYaxis(number, left, right);
-            max = Math.Max(calculaterYaxis.Answers.Max(), width);
-            foreach (var item in calculaterYaxis.Answers.Select((x, index) => new Tuple<int, double>(index, x)))
+            Calculate calculater = new Calculate(tile, width, left, right);
+            number = calculater.Number;
+            extra = calculater.Extra;
+            max = Math.Max(calculater.Answers.Max(), width);
+            foreach (var item in calculater.Answers.Select((x, index) => new Tuple<int, double>(index, x)))
             {
                 lines.Add(new Line(max, scale, item.Item2, item.Item1 * tile, true, extra));
                 lines.Add(new Line(item.Item1 * tile, item.Item1 * tile + tile, 0, 0, max, scale, false, extra));
