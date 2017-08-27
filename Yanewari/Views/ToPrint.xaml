@@ -33,7 +33,7 @@
                         <DataTemplate>
                             <Canvas Height="{Binding Path=Scaled.Y2}">
                                 <Line X1="{Binding Path=X1D}" X2="{Binding Path=X2D}" Y1="{Binding Path=Y1D}" Y2="{Binding Path=Y2D}" Stroke="Black" Canvas.Top="0" Canvas.Left="0"/>
-                                <TextBlock Text="{Binding Path=RealValue}" Canvas.Top="{Binding Path=PostionY}" Canvas.Left="{Binding Path=X1D}" FontSize="17">
+                                <TextBlock Text="{Binding Path=RealValue}" Canvas.Top="{Binding Path=PostionY}" Canvas.Left="{Binding Path=StringLocation}" FontSize="17">
                                     <TextBlock.LayoutTransform>
                                         <TransformGroup>
                                             <RotateTransform Angle="90"/>

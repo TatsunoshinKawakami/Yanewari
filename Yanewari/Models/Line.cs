@@ -19,6 +19,7 @@ namespace Yanewari.Models
         public string RealValue { get; set; }
         public double PostionY { get { return (y1 + y2) / 2 / max * display; } set { } }
         public bool IsView { get; set; }
+        public double StringLocation { get; set; }
 
         private double x1;
         private double x2;
@@ -28,28 +29,30 @@ namespace Yanewari.Models
         private double max;
         private double display;
 
-        public Line(double max, double display, double height, double x, bool isView, double extra)
+        public Line(double max, double display, double height, double x, bool isView, double stringLocation)
         {
-            x1 = x+extra;
+            x1 = x;
             y1 = 0;
-            x2 = x+extra;
+            x2 = x;
             y2 = height;
             this.max = max;
             this.display = display;
             this.PostionY = (y1 + y2) / 2;
             this.RealValue = isView ? ((int)height).ToString() : "";
             IsView = isView;
+            StringLocation = stringLocation;
         }
-        public Line(double x1, double x2, double y1, double y2, double max, double display, bool isView, double extra)
+        public Line(double x1, double x2, double y1, double y2, double max, double display, bool isView, double stringLocation)
         {
-            this.x1 = x1+extra;
-            this.x2 = x2+extra;
+            this.x1 = x1;
+            this.x2 = x2;
             this.y1 = y1;
             this.y2 = y2;
             this.max = max;
             this.display = display;
             this.RealValue = isView ? ((int)y2).ToString() : "";
             IsView = isView;
+            StringLocation = stringLocation;
         }
     }
 }

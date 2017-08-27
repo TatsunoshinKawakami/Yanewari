@@ -57,11 +57,10 @@ namespace Yanewari.ViewModels
             get { return scale; }
             set
             {
+                lines = lines.AsParallel().Select(x => new Line(x.X1, x.X2, x.Y1, x.Y2, max, value, x.IsView, x.StringLocation / scale * value)).ToList();
                 scale = value;
                 if (lines.Count == 0)
                     return;
-                lines = lines.AsParallel().Select(x => new Line(x.X1, x.X2, x.Y1, x.Y2, max, scale, x.IsView, 0)).ToList();
-                lastX = lines.Last().X1D;
                 RaisePropertyChanged("Scale");
                 RaisePropertyChanged("Lines");
                 RaisePropertyChanged("LastX");
@@ -84,7 +83,7 @@ namespace Yanewari.ViewModels
         }
         public double LastX
         {
-            get { return lastX; }
+            get { return lastX = (width??0 - extra) / max * scale; }
             set { lastX = value; RaisePropertyChanged("LastX"); }
         }
 
@@ -101,20 +100,29 @@ namespace Yanewari.ViewModels
             Calculate calculater = new Calculate(tile, width, left, right);
             number = calculater.Number;
             extra = calculater.Extra;
-            max = Math.Max(calculater.Answers.Max(), width);
-            foreach (var item in calculater.Answers.Select((x, index) => new Tuple<int, double>(index, x)))
+            max = Math.Max(calculater.Answers.Select(x=>x.Item2).Max(), width);
+
+            lines.Add(new Line(max, scale, calculater.Answers.First().Item2, calculater.Answers.First().Item1, true, left < right ? -17 : width / max * scale));
+            lines.Add(new Line(calculater.Answers.First().Item1, calculater.Answers.First().Item1 + extra, 0, 0, max, scale, false, 0));
+            lines.Add(new Line(calculater.Answers.First().Item1, calculater.Answers.First().Item1 + extra, calculater.Answers.First().Item2, calculater.Answers.First().Item2, max, scale, false, 0));
+            lines.Add(new Line(max, scale, calculater.Answers.First().Item2, calculater.Answers.First().Item1 + extra, false, 0));
+            lines.Add(new Line(max, scale, calculater.Answers.Last().Item2, calculater.Answers.Last().Item1, true, left < right ? width / max * scale : -17));
+            lines.Add(new Line(calculater.Answers.Last().Item1, calculater.Answers.Last().Item1 + extra, 0, 0, max, scale, false, 0));
+            lines.Add(new Line(calculater.Answers.Last().Item1, calculater.Answers.Last().Item1 + extra, calculater.Answers.Last().Item2, calculater.Answers.Last().Item2, max, scale, false, 0));
+            lines.Add(new Line(max, scale, calculater.Answers.Last().Item2, calculater.Answers.Last().Item1 + extra, false, 0));
+            calculater.Answers.RemoveAt(0);
+            calculater.Answers.RemoveAt(calculater.Answers.Count - 1);
+            foreach (var item in calculater.Answers)
             {
-                lines.Add(new Line(max, scale, item.Item2, item.Item1 * tile, true, extra));
-                lines.Add(new Line(item.Item1 * tile, item.Item1 * tile + tile, 0, 0, max, scale, false, extra));
-                lines.Add(new Line(item.Item1 * tile, item.Item1 * tile + tile, item.Item2, item.Item2, max, scale, false, extra));
-                lines.Add(new Line(max, scale, item.Item2, (item.Item1 + 1) * tile, false, extra));
+                lines.Add(new Line(max, scale, item.Item2, item.Item1, true, item.Item1 / max * scale));
+                lines.Add(new Line(item.Item1, item.Item1 + tile, 0, 0, max, scale, false, 0));
+                lines.Add(new Line(item.Item1, item.Item1 + tile, item.Item2, item.Item2, max, scale, false, 0));
+                lines.Add(new Line(max, scale, item.Item2, item.Item1 + tile, false, 0));
             }
-            lines.Add(new Line(0, extra, 0, 0, max, scale, false, 0));
-            lines.Add(new Line(number * tile, number * tile + extra, 0, 0, max, scale, false, extra));
-            lastX = lines.Last().X1D;
             RaisePropertyChanged("Lines");
             RaisePropertyChanged("Number");
             RaisePropertyChanged("Extra");
+            RaisePropertyChanged("LastX");
         }
         private bool canCalculate() { return width != null && left != null && right != null; }
 

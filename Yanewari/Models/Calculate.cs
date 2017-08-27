@@ -15,7 +15,7 @@ namespace Yanewari.Models
 
         private int number;
         private double extra;
-        private List<double> answers = new List<double>();
+        private List<Tuple<double, double>> answers = new List<Tuple<double, double>>();
 
         /// <summary>
         /// 幅に用いる瓦の枚数
@@ -25,7 +25,7 @@ namespace Yanewari.Models
         /// 指定幅との差
         /// </summary>
         public double Extra { get { return extra; } set { extra = value; } }
-        public List<double> Answers { get { return answers; } }
+        public List<Tuple<double,double>> Answers { get { return answers; } }
 
         private void calculate()
         {
@@ -52,11 +52,13 @@ namespace Yanewari.Models
             double diff = Math.Abs(left - right);
             double scale = width / diff;
             double width_triangle = Math.Max(left, right) * scale;
-            foreach (int coeff in Enumerable.Range(0, number))
-                answers.Add((width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle);
-
-            if (left > right)
-                answers.Reverse();
+            answers.Add(new Tuple<double, double>(left < right ? 0 : width - extra, (width_triangle - width + extra) * Math.Max(left, right) / width_triangle));
+            foreach (int coeff in Enumerable.Range(1, number))
+                if(left < right)
+                    answers.Add(new Tuple<double, double>((coeff - 1) * tile + extra, (width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle));
+                else
+                    answers.Add(new Tuple<double, double>((number - coeff) * tile + extra, (width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle));
+            answers.Add(new Tuple<double, double>(left < right ? width - extra : 0, (width_triangle) * Math.Max(left, right) / width_triangle));
         }
 
         /// <summary>
