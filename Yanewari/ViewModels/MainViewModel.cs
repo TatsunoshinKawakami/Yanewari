@@ -60,7 +60,7 @@ namespace Yanewari.ViewModels
                 scale = value;
                 if (lines.Count == 0)
                     return;
-                lines = lines.Select(x => new Line(x.X1, x.X2, x.Y1, x.Y2, max, scale, x.IsView, 0)).ToList();
+                lines = lines.AsParallel().Select(x => new Line(x.X1, x.X2, x.Y1, x.Y2, max, scale, x.IsView, 0)).ToList();
                 lastX = lines.Last().X1D;
                 RaisePropertyChanged("Scale");
                 RaisePropertyChanged("Lines");

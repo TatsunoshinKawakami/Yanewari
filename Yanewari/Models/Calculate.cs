@@ -54,6 +54,9 @@ namespace Yanewari.Models
             double width_triangle = Math.Max(left, right) * scale;
             foreach (int coeff in Enumerable.Range(0, number))
                 answers.Add((width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle);
+
+            if (left > right)
+                answers.Reverse();
         }
 
         /// <summary>
