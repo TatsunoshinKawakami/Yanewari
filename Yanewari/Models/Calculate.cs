@@ -49,16 +49,13 @@ namespace Yanewari.Models
             }
             extra /= 2;
 
-            double diff = Math.Abs(left - right);
-            double scale = width / diff;
-            double width_triangle = Math.Max(left, right) * scale;
-            answers.Add(new Tuple<double, double>(left < right ? 0 : width - extra, (width_triangle - width + extra) * Math.Max(left, right) / width_triangle));
+            answers.Add(new Tuple<double, double>(left < right ? 0 : width - extra, extra / width * (Math.Abs(left - right)) + Math.Min(left, right)));
             foreach (int coeff in Enumerable.Range(1, number))
                 if(left < right)
-                    answers.Add(new Tuple<double, double>((coeff - 1) * tile + extra, (width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle));
+                    answers.Add(new Tuple<double, double>((coeff - 1) * tile + extra, (tile * coeff + extra) / width * (Math.Abs(left - right)) + Math.Min(left, right)));
                 else
-                    answers.Add(new Tuple<double, double>((number - coeff) * tile + extra, (width_triangle - width + extra + tile * coeff) * Math.Max(left, right) / width_triangle));
-            answers.Add(new Tuple<double, double>(left < right ? width - extra : 0, (width_triangle) * Math.Max(left, right) / width_triangle));
+                    answers.Add(new Tuple<double, double>((number - coeff) * tile + extra, (tile * coeff + extra) / width * (Math.Abs(left - right)) + Math.Min(left, right)));
+            answers.Add(new Tuple<double, double>(left < right ? width - extra : 0, (Math.Abs(left - right)) + Math.Min(left, right)));
         }
 
         /// <summary>
