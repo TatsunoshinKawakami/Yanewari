@@ -16,6 +16,9 @@ namespace Yanewari.ViewModels
     {
         private double[] table = { 500, 333, 600, 370 };
         private double tile;
+        private int selectedTile;
+        private double? tileBox = null;
+        private bool tileBoxControl = false;
         private double? width;
         private double? left;
         private double? right;
@@ -33,10 +36,28 @@ namespace Yanewari.ViewModels
 
         public List<string> Tile
         {
-            get { return new List<string> { "166ハゼ", "Tかん金", "90ハゼ", "立馳" }; }
+            get { return new List<string> { "166ハゼ", "Tかん金", "90ハゼ", "立馳", "その他" }; }
             set { }
         }
-        public int SelectedTile { get; set; }
+        public int SelectedTile
+        {
+            get { return selectedTile; }
+            set
+            {
+                selectedTile = value;
+                TileBoxControl = selectedTile == 4;
+            }
+        }
+        public double? TileBox
+        {
+            get { return tileBox; }
+            set { tileBox = value; RaisePropertyChanged("TileBox"); }
+        }
+        public bool TileBoxControl
+        {
+            get { return tileBoxControl; }
+            set { tileBoxControl = value; RaisePropertyChanged("TileBoxControl"); }
+        }
         public double? Width
         {
             get { return width; }
@@ -95,7 +116,7 @@ namespace Yanewari.ViewModels
             double left = this.left??-1;
             double right = this.right??-1;
 
-            tile = table[SelectedTile];
+            tile = tileBoxControl ? (tileBox??-1) : table[SelectedTile];
             lines = new List<Line>();
             Calculate calculater = new Calculate(tile, width, left, right);
             number = calculater.Number;

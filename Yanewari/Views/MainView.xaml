@@ -28,6 +28,10 @@
                     <ComboBox ItemsSource="{Binding Path=Tile}" VerticalContentAlignment="Center" SelectedIndex="{Binding Path=SelectedTile, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Parameter}">
+                    <Label Content="重ね" Width="75"/>
+                    <TextBox Text="{Binding Path=TileBox, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=TileBoxControl}" TextWrapping="Wrap" Width="120" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Parameter}">
                     <Label Content="屋根幅" Width="75"/>
                     <TextBox Text="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="120" FontSize="20"/>
                 </StackPanel>
