@@ -41,6 +41,8 @@ namespace Yanewari
 			//こちらのオーバーロードだと、プリンタ選択ダイアログが出る。
 			xpsdw = PrintQueue.CreateXpsDocumentWriter(ref imgArea);
 
+			if(xpsdw == null) { return; }
+
 			//var ps = new LocalPrintServer();
 			//var pq = ps.DefaultPrintQueue; 
 			//こちらのオーバーロードだと、プリンタ選択ダイアログを飛ばして既定のプリンタにスプールされる
